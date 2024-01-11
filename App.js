@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+//screens
+import MainMenu from './src/screens/MainMenu';
+import SettingsScreen from './src/screens/Settings';
+import PlayScreen from './src/screens/Play';
+import PrivacyPolicyScreen from './src/screens/PrivacyPolicy';
+import WebViewScreen from './src/components/WebViewScreen';
+//libs
+import { ColorThemeProvider } from './src/context';
 
-export default function App() {
+const Stack = createStackNavigator();
+
+function App() {
+  const [hasConfirmed, setHasConfirmed] = React.useState(true);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <ColorThemeProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator
+                initialRouteName={hasConfirmed ? 'MainMenu' : 'PrivacyPolicy'}
+            >
+              <Stack.Screen name="MainMenu" component={MainMenu} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen name="Play" component={PlayScreen} />
+              <Stack.Screen
+                  name="PrivacyPolicy"
+                  component={PrivacyPolicyScreen}
+              />
+              <Stack.Screen name="WebView" component={WebViewScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </ColorThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
